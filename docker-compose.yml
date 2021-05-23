@@ -1,0 +1,32 @@
+version: '3'
+services:
+  drupaldocker:
+    container_name: ${PROJ}
+    hostname: ${PROJ}
+    depends_on:
+      - ${MYSQL_HOSTNAME}
+    build:
+      dockerfile: .docker/Dockerfile
+      context: ./
+    ports:
+      - ${PORT}
+    volumes:
+      - .:/app
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_HOSTNAME: ${MYSQL_HOSTNAME}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_USER: ${MYSQL_USER}
+  drupaldocker-db:
+    container_name: ${MYSQL_HOSTNAME}
+    hostname: ${MYSQL_HOSTNAME}
+    image: mariadb:10.2
+    environment:
+      MYSQL_DATABASE: drupal
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - "/var/lib/mysql"
+    restart: unless-stopped
