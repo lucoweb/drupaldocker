@@ -23,7 +23,7 @@ services:
   drupaldocker-db:
     container_name: ${MYSQL_HOSTNAME}
     hostname: ${MYSQL_HOSTNAME}
-    image: mariadb:10.2
+    image: mariadb:10.3
     environment:
       MYSQL_DATABASE: drupal
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
