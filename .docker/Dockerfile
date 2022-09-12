@@ -24,12 +24,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
 
 RUN apt-get install -y mysql-client curl git tig vim nano wget tree unzip gnupg2 patch
 
-# Install composer
-RUN wget -q https://getcomposer.org/composer-1.phar -O composer && \
-	chmod +x composer && \
-	mv composer /usr/local/bin
-RUN composer global require hirak/prestissimo
-
 # Install Drush
 RUN wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/download/0.4.2/drush.phar && \
 	chmod +x drush.phar && \
@@ -53,14 +47,15 @@ RUN npm install -g yarn gulp gulp-cli
 RUN rm -rf /var/www/html/*
 
 COPY .docker/apache-drupal.conf /etc/apache2/sites-enabled/000-default.conf
-
 COPY .docker/opcache.ini /etc/php/8.1/apache2/conf.d/
 COPY .docker/php.ini /etc/php/8.1/apache2/conf.d
+COPY .docker/getcomposer.sh /getcomposer.sh
 
-RUN echo 'change 04'
+RUN /getcomposer.sh
+MOVE composer.phar /usr/local/bin/composer
 
-WORKDIR /app/drupal
+WORKDIR /app/drupal/web
 
-RUN composer create-project drupal/recommended-project:^9.4 .
+# RUN composer create-project drupal/recommended-project:^9.4 .
 
 CMD service php8.1-fpm start;apachectl -D FOREGROUND
