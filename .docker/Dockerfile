@@ -51,10 +51,14 @@ COPY .docker/opcache.ini /etc/php/8.1/apache2/conf.d/
 COPY .docker/php.ini /etc/php/8.1/apache2/conf.d
 COPY .docker/getcomposer.sh /getcomposer.sh
 
-RUN /getcomposer.sh
-MOVE composer.phar /usr/local/bin/composer
+RUN mkdir -p /app/drupal/vendor
+RUN mkdir -p /app/drupal/web
 
-WORKDIR /app/drupal/web
+WORKDIR /app/drupal
+
+RUN /getcomposer.sh
+RUN mv composer.phar /usr/local/bin/composer
+RUN rm /getcomposer.sh
 
 # RUN composer create-project drupal/recommended-project:^9.4 .
 

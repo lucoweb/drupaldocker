@@ -2,8 +2,6 @@ include .env
 
 default: up
 
-i:
-	docker install
 install:
 	make build
 build:
